@@ -7,11 +7,20 @@ import { toast } from "sonner";
 const Index = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const handleAddTask = (title: string, description: string) => {
+  const handleAddTask = (
+    title: string,
+    description: string,
+    priority: 'low' | 'medium' | 'high',
+    deadline: Date | undefined,
+    tags: string[]
+  ) => {
     const newTask: Task = {
       id: crypto.randomUUID(),
       title,
       description,
+      priority,
+      deadline,
+      tags,
       timeEntries: [],
     };
     setTasks([...tasks, newTask]);

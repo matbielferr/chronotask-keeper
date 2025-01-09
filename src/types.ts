@@ -2,6 +2,9 @@ export interface Task {
   id: string;
   title: string;
   description: string;
+  priority: 'low' | 'medium' | 'high';
+  deadline?: Date;
+  tags: string[];
   timeEntries: TimeEntry[];
 }
 

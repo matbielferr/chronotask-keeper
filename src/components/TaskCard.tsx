@@ -2,14 +2,28 @@ import { useState } from "react";
 import { Task } from "@/types";
 import { TimeDisplay, formatTime } from "./TimeDisplay";
 import { Button } from "@/components/ui/button";
-import { PlayCircle, StopCircle, Timer } from "lucide-react";
+import { PlayCircle, StopCircle, Timer, Calendar, Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface TaskCardProps {
   task: Task;
   onStartTracking: (taskId: string) => void;
   onStopTracking: (taskId: string) => void;
 }
+
+const getPriorityColor = (priority: 'low' | 'medium' | 'high') => {
+  switch (priority) {
+    case 'low':
+      return 'bg-green-100 text-green-800';
+    case 'medium':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'high':
+      return 'bg-red-100 text-red-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+};
 
 export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProps) => {
   const currentTimeEntry = task.timeEntries.find(entry => !entry.endTime);
@@ -23,7 +37,20 @@ export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProp
   return (
     <Card className="w-full mb-4 hover:shadow-md transition-shadow">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-semibold">{task.title}</CardTitle>
+        <div className="flex flex-col">
+          <CardTitle className="text-xl font-semibold">{task.title}</CardTitle>
+          <div className="flex items-center gap-2 mt-2">
+            <Badge className={getPriorityColor(task.priority)}>
+              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+            </Badge>
+            {task.deadline && (
+              <div className="flex items-center text-sm text-gray-500">
+                <Calendar className="w-4 h-4 mr-1" />
+                {new Date(task.deadline).toLocaleDateString()}
+              </div>
+            )}
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           <Timer className="w-4 h-4 text-gray-500" />
           <TimeDisplay 
@@ -34,6 +61,16 @@ export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProp
       </CardHeader>
       <CardContent>
         <p className="text-gray-600 mb-4">{task.description}</p>
+        {task.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {task.tags.map((tag, index) => (
+              <Badge key={index} variant="secondary" className="flex items-center">
+                <Tag className="w-3 h-3 mr-1" />
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-500">
             {currentTimeEntry && (
