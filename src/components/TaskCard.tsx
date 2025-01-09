@@ -2,14 +2,16 @@ import { useTranslation } from "react-i18next";
 import { Task } from "@/types";
 import { TimeDisplay, formatTime } from "./TimeDisplay";
 import { Button } from "@/components/ui/button";
-import { PlayCircle, StopCircle, Timer, Calendar, Tag } from "lucide-react";
+import { PlayCircle, StopCircle, Timer, Calendar, Tag, Edit2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { AddTaskDialog } from "./AddTaskDialog";
 
 interface TaskCardProps {
   task: Task;
   onStartTracking: (taskId: string) => void;
   onStopTracking: (taskId: string) => void;
+  onEditTask: (taskId: string, title: string, description: string, priority: 'low' | 'medium' | 'high', deadline: Date | undefined, tags: string[]) => void;
 }
 
 const getPriorityColor = (priority: 'low' | 'medium' | 'high') => {
@@ -25,7 +27,7 @@ const getPriorityColor = (priority: 'low' | 'medium' | 'high') => {
   }
 };
 
-export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProps) => {
+export const TaskCard = ({ task, onStartTracking, onStopTracking, onEditTask }: TaskCardProps) => {
   const { t } = useTranslation();
   const currentTimeEntry = task.timeEntries.find(entry => !entry.endTime);
   const isTracking = !!currentTimeEntry;
@@ -78,29 +80,42 @@ export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProp
               <span>{t('startedAt')} {formatTime(currentTimeEntry.startTime)}</span>
             )}
           </div>
-          <Button
-            variant={isTracking ? "destructive" : "default"}
-            size="sm"
-            onClick={() => {
-              if (isTracking) {
-                onStopTracking(task.id);
-              } else {
-                onStartTracking(task.id);
+          <div className="flex gap-2">
+            <AddTaskDialog
+              mode="edit"
+              task={task}
+              onEditTask={onEditTask}
+              trigger={
+                <Button variant="outline" size="sm">
+                  <Edit2 className="w-4 h-4 mr-2" />
+                  {t('edit')}
+                </Button>
               }
-            }}
-          >
-            {isTracking ? (
-              <>
-                <StopCircle className="w-4 h-4 mr-2" />
-                {t('stop')}
-              </>
-            ) : (
-              <>
-                <PlayCircle className="w-4 h-4 mr-2" />
-                {t('start')}
-              </>
-            )}
-          </Button>
+            />
+            <Button
+              variant={isTracking ? "destructive" : "default"}
+              size="sm"
+              onClick={() => {
+                if (isTracking) {
+                  onStopTracking(task.id);
+                } else {
+                  onStartTracking(task.id);
+                }
+              }}
+            >
+              {isTracking ? (
+                <>
+                  <StopCircle className="w-4 h-4 mr-2" />
+                  {t('stop')}
+                </>
+              ) : (
+                <>
+                  <PlayCircle className="w-4 h-4 mr-2" />
+                  {t('start')}
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

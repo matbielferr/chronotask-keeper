@@ -30,6 +30,30 @@ const Index = () => {
     toast.success(t('taskAdded'));
   };
 
+  const handleEditTask = (
+    taskId: string,
+    title: string,
+    description: string,
+    priority: 'low' | 'medium' | 'high',
+    deadline: Date | undefined,
+    tags: string[]
+  ) => {
+    setTasks(tasks.map(task => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          title,
+          description,
+          priority,
+          deadline,
+          tags,
+        };
+      }
+      return task;
+    }));
+    toast.success(t('taskUpdated'));
+  };
+
   const handleStartTracking = (taskId: string) => {
     setTasks(tasks.map(task => {
       if (task.id === taskId) {
@@ -79,6 +103,7 @@ const Index = () => {
               task={task}
               onStartTracking={handleStartTracking}
               onStopTracking={handleStopTracking}
+              onEditTask={handleEditTask}
             />
           ))}
           {tasks.length === 0 && (
