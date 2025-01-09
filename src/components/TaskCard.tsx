@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Task } from "@/types";
 import { TimeDisplay, formatTime } from "./TimeDisplay";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ const getPriorityColor = (priority: 'low' | 'medium' | 'high') => {
 };
 
 export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProps) => {
+  const { t } = useTranslation();
   const currentTimeEntry = task.timeEntries.find(entry => !entry.endTime);
   const isTracking = !!currentTimeEntry;
 
@@ -41,7 +42,7 @@ export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProp
           <CardTitle className="text-xl font-semibold">{task.title}</CardTitle>
           <div className="flex items-center gap-2 mt-2">
             <Badge className={getPriorityColor(task.priority)}>
-              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+              {t(task.priority)}
             </Badge>
             {task.deadline && (
               <div className="flex items-center text-sm text-gray-500">
@@ -74,7 +75,7 @@ export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProp
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-500">
             {currentTimeEntry && (
-              <span>Started at {formatTime(currentTimeEntry.startTime)}</span>
+              <span>{t('startedAt')} {formatTime(currentTimeEntry.startTime)}</span>
             )}
           </div>
           <Button
@@ -91,12 +92,12 @@ export const TaskCard = ({ task, onStartTracking, onStopTracking }: TaskCardProp
             {isTracking ? (
               <>
                 <StopCircle className="w-4 h-4 mr-2" />
-                Stop
+                {t('stop')}
               </>
             ) : (
               <>
                 <PlayCircle className="w-4 h-4 mr-2" />
-                Start
+                {t('start')}
               </>
             )}
           </Button>

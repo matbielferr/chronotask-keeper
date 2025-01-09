@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,6 +19,7 @@ interface AddTaskDialogProps {
 }
 
 export const AddTaskDialog = ({ onAddTask }: AddTaskDialogProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -46,30 +48,30 @@ export const AddTaskDialog = ({ onAddTask }: AddTaskDialogProps) => {
       <DialogTrigger asChild>
         <Button className="w-full">
           <Plus className="w-4 h-4 mr-2" />
-          Add New Task
+          {t('addNewTask')}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Task</DialogTitle>
+          <DialogTitle>{t('addNewTask')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Input
-              placeholder="Task title"
+              placeholder={t('taskTitle')}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div>
             <Textarea
-              placeholder="Task description (optional)"
+              placeholder={t('taskDescription')}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label>Priority</Label>
+            <Label>{t('priority')}</Label>
             <RadioGroup
               value={priority}
               onValueChange={(value: 'low' | 'medium' | 'high') => setPriority(value)}
@@ -77,20 +79,20 @@ export const AddTaskDialog = ({ onAddTask }: AddTaskDialogProps) => {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="low" id="low" />
-                <Label htmlFor="low">Low</Label>
+                <Label htmlFor="low">{t('low')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="medium" id="medium" />
-                <Label htmlFor="medium">Medium</Label>
+                <Label htmlFor="medium">{t('medium')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="high" id="high" />
-                <Label htmlFor="high">High</Label>
+                <Label htmlFor="high">{t('high')}</Label>
               </div>
             </RadioGroup>
           </div>
           <div>
-            <Label>Deadline</Label>
+            <Label>{t('deadline')}</Label>
             <Input
               type="datetime-local"
               value={deadline}
@@ -98,15 +100,15 @@ export const AddTaskDialog = ({ onAddTask }: AddTaskDialogProps) => {
             />
           </div>
           <div>
-            <Label>Tags (comma-separated)</Label>
+            <Label>{t('tags')}</Label>
             <Input
-              placeholder="e.g., work, personal, urgent"
+              placeholder={t('tagsPlaceholder')}
               value={tags}
               onChange={(e) => setTags(e.target.value)}
             />
           </div>
           <Button type="submit" className="w-full">
-            Add Task
+            {t('addNewTask')}
           </Button>
         </form>
       </DialogContent>

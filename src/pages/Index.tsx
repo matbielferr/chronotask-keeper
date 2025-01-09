@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Task } from "@/types";
 import { TaskCard } from "@/components/TaskCard";
 import { AddTaskDialog } from "@/components/AddTaskDialog";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { toast } from "sonner";
 
 const Index = () => {
+  const { t } = useTranslation();
   const [tasks, setTasks] = useState<Task[]>([]);
 
   const handleAddTask = (
@@ -24,7 +27,7 @@ const Index = () => {
       timeEntries: [],
     };
     setTasks([...tasks, newTask]);
-    toast.success("Task added successfully");
+    toast.success(t('taskAdded'));
   };
 
   const handleStartTracking = (taskId: string) => {
@@ -40,7 +43,7 @@ const Index = () => {
       }
       return task;
     }));
-    toast.success("Time tracking started");
+    toast.success(t('trackingStarted'));
   };
 
   const handleStopTracking = (taskId: string) => {
@@ -58,13 +61,14 @@ const Index = () => {
       }
       return task;
     }));
-    toast.success("Time tracking stopped");
+    toast.success(t('trackingStopped'));
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">Task Organizer</h1>
+        <LanguageSwitcher />
+        <h1 className="text-3xl font-bold mb-8 text-center">{t('taskOrganizer')}</h1>
         <div className="mb-6">
           <AddTaskDialog onAddTask={handleAddTask} />
         </div>
@@ -79,7 +83,7 @@ const Index = () => {
           ))}
           {tasks.length === 0 && (
             <p className="text-center text-gray-500 mt-8">
-              No tasks yet. Add your first task to get started!
+              {t('noTasks')}
             </p>
           )}
         </div>
