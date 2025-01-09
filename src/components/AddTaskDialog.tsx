@@ -67,7 +67,7 @@ export const AddTaskDialog = ({ onAddTask }: AddTaskDialogProps) => {
             <Textarea
               placeholder={t('taskDescription')}
               value={description}
-              onChange.value)}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div className="space-y-2">
